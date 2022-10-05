@@ -21,6 +21,36 @@ class Assignment extends React.Component {
    componentDidMount() {
     this.fetchAssignments();
   }
+
+  addAssignmentApi = (a) => {
+    const token = Cookies.get('XSRF-TOKEN');
+    fetch(`${SERVER_URL}/addnewassignment`, 
+    {  
+      method: 'POST', 
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': token
+      },
+      body: JSON.stringify(a)
+    })
+    .then(response => {
+      if (response.ok) {
+        toast.success("Assignment saved successfully", {
+        position: toast.POSITION.BOTTOM_LEFT
+        });
+      } else {
+        toast.error("Save failed", {
+        position: toast.POSITION.BOTTOM_LEFT
+        });
+        console.error('Post http status =' + response.status);
+    }})
+    .catch(err => {
+      toast.error("Save failed.", {
+          position: toast.POSITION.BOTTOM_LEFT
+        });
+        console.error(err); 
+    });
+  }
  
   fetchAssignments = () => {
     console.log("Assignment.fetchAssignments");
@@ -58,7 +88,7 @@ class Assignment extends React.Component {
         renderCell: (params) => (
           <div>
           <Radio
-            checked={params.row.id == this.state.selected}
+            checked={params.row.id === this.state.selected}
             onChange={this.onRadioClick}
             value={params.row.id}
             color="default"
@@ -83,6 +113,10 @@ class Assignment extends React.Component {
                     variant="outlined" color="primary" disabled={this.state.assignments.length===0}  style={{margin: 10}}>
               Grade
             </Button>
+
+            <Button component={Link} to={{pathname:'/addAssignment'}} 
+            variant="outlined" color="primary" disabled={this.state.assignments.length===0}  style={{margin: 10}}> Add Assignment</Button>
+
             <ToastContainer autoClose={1500} /> 
           </div>
       )
