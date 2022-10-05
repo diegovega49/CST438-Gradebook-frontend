@@ -21,7 +21,7 @@ const AddAssignment = (props) => {
 
     const handleAdd = () => {
         this.props.addAssignmentApi(assignment);
-        console.log("new assignment saved: " + assignment.name + " " + assignment.dueDate + " " + assignment.course);
+        console.log("new assignment saved: " + assignment.name + " " + assignment.dueDate + "  " + assignment.course);
         handleClose();
     }
 
